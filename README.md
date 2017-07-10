@@ -1,6 +1,6 @@
 # pngshot
 
-pngshot is a plugin to make screenshots good again.
+pngshot is a plugin to make screenshots great again.
 
 ## Features
 
