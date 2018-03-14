@@ -180,22 +180,41 @@ int module_start() {
 	info.size = sizeof(info);
 	taiGetModuleInfo(TAI_MAIN_MODULE, &info);
 
-	// disable watermark
-	taiHookFunctionOffset(&watermark_hook, info.modid, 0, 0x247e00, 1, place_watermark_hook);
+	if (info.module_nid == 0x0552F692) { // 3.60 retail
+		// disable watermark
+		taiHookFunctionOffset(&watermark_hook, info.modid, 0, 0x247e00, 1, place_watermark_hook);
 
-	// enable type=2 screenshot encoding
-	taiHookFunctionOffset(&encode_hook, info.modid, 0, 0x365f46, 1, encode_screenshot);
+		// enable type=2 screenshot encoding
+		taiHookFunctionOffset(&encode_hook, info.modid, 0, 0x365f46, 1, encode_screenshot);
 
-	// replace type=2 encoding with our png implementation
-	taiHookFunctionOffset(&encode_type2_hook, info.modid, 0, 0x36bd22, 1, encode_type2);
+		// replace type=2 encoding with our png implementation
+		taiHookFunctionOffset(&encode_type2_hook, info.modid, 0, 0x36bd22, 1, encode_type2);
 
-	// change branch for 0x34560004 (screenshot disable) to 0x34560003 (screenshot enable)
-	int value = 0x3b;
-	taiInjectData(info.modid, 0, 0x248840, &value, 2);
+		// change branch for 0x34560004 (screenshot disable) to 0x34560003 (screenshot enable)
+		int value = 0x3b;
+		taiInjectData(info.modid, 0, 0x248840, &value, 2);
 
-	// change extension from jpg to png
-	const char *path = "ur0:temp/screenshot/capture.png";
-	taiInjectData(info.modid, 0, 0x5148b8, path, strlen(path) + 1);
+		// change extension from jpg to png
+		const char *path = "ur0:temp/screenshot/capture.png";
+		taiInjectData(info.modid, 0, 0x5148b8, path, strlen(path) + 1);
+	} else if (info.module_nid == 0x5549BF1F || info.module_nid == 0x34B4D82E) { // 3.65/3.67 retail
+		// disable watermark
+		taiHookFunctionOffset(&watermark_hook, info.modid, 0, 0x247e9c, 1, place_watermark_hook);
+
+		// enable type=2 screenshot encoding
+		taiHookFunctionOffset(&encode_hook, info.modid, 0, 0x36638a, 1, encode_screenshot);
+
+		// replace type=2 encoding with our png implementation
+		taiHookFunctionOffset(&encode_type2_hook, info.modid, 0, 0x36c166, 1, encode_type2);
+
+		// change branch for 0x34560004 (screenshot disable) to 0x34560003 (screenshot enable)
+		int value = 0x3b;
+		taiInjectData(info.modid, 0, 0x2488dc, &value, 2);
+
+		// change extension from jpg to png
+		const char *path = "ur0:temp/screenshot/capture.png";
+		taiInjectData(info.modid, 0, 0x514df8, path, strlen(path) + 1);
+	}
 
 	return 0;
 }
