@@ -197,7 +197,9 @@ int module_start() {
 		// change extension from jpg to png
 		const char *path = "ur0:temp/screenshot/capture.png";
 		taiInjectData(info.modid, 0, 0x5148b8, path, strlen(path) + 1);
-	} else if (info.module_nid == 0x5549BF1F || info.module_nid == 0x34B4D82E) { // 3.65/3.67 retail
+	} else if (info.module_nid == 0x5549BF1F ||
+		   info.module_nid == 0x34B4D82E ||
+		   info.module_nid == 0x12DAC0F3) { // 3.65/3.67/3.68 retail
 		// disable watermark
 		taiHookFunctionOffset(&watermark_hook, info.modid, 0, 0x247e9c, 1, place_watermark_hook);
 
