@@ -218,6 +218,8 @@ int module_start() {
 	}else if (info.module_nid == 0x5549BF1F ||
 		   info.module_nid == 0x34B4D82E ||
 		   info.module_nid == 0x12DAC0F3) { // 3.65/3.67/3.68 retail
+		   info.module_nid == 0x0703C828) { // 3.69 retail
+                   info.module_nid == 0x2053B5A5) { // 3.70 retail
 		// disable watermark
 		taiHookFunctionOffset(&watermark_hook, info.modid, 0, 0x247e9c, 1, place_watermark_hook);
 
